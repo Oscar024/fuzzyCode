@@ -187,7 +187,7 @@ void fuzzy_system(void)
     }
 }
 
-double fuzzy_system_single(double input)
+double fuzzy_system_single2(double input)
 {
     double ante_mf1[SIZE],cons_mf1[SIZE];
     double ante_mf2[SIZE],cons_mf2[SIZE];
@@ -228,15 +228,54 @@ double fuzzy_system_single(double input)
 
 
 
+double fuzzy_system_single1(double input)
+{
+    double ante_mf1[SIZE],cons_mf1[SIZE];
+    double ante_mf2[SIZE],cons_mf2[SIZE];
+    double ante_mf3[SIZE],cons_mf3[SIZE];
+    double x[SIZE],y[SIZE];
+    double qualified_cons_mf1[SIZE],qualified_cons_mf2[SIZE],qualified_cons_mf3[SIZE];
+    double overall_out_mf[SIZE];
+    double w1,w2,w3;
+    double output;
+    int i;
+    linspace(x,-2,2,SIZE);
+    linspace(y,0,100,SIZE);
+    //printArray(x,SIZE);
+    //Funciones de membrecia de antecedente
+    tri_mf(ante_mf1,x,-3.6, -2, -0.4);
+    tri_mf(ante_mf2,x,-1.6, 0, 1.6);
+    tri_mf(ante_mf3,x,0.4, 2, 3.6);
+
+    //Funciones de membrecia de consecuente
+    tri_mf(cons_mf1,y,-40, 0, 40);
+    tri_mf(cons_mf2,y,10, 50, 90);
+    tri_mf(cons_mf3,y,60, 100, 140);
+
+    //Fuzzy inference system
+    //for(i=0;i<SIZE;i++){
+        w1=triangular(-3.6, -2, -0.4,input);
+        w2=triangular(-1.6, 0, 1.6,input);
+        w3=triangular(0.4, 2, 3.6,input);
+        qualified(qualified_cons_mf1,cons_mf3,w1);
+        qualified(qualified_cons_mf2,cons_mf3,w2);
+        qualified(qualified_cons_mf3,cons_mf1,w3);
+        out_mf(overall_out_mf,qualified_cons_mf1,qualified_cons_mf2,qualified_cons_mf3);
+        output= defuzzy(y,overall_out_mf);
+        return output;
+    //}
+}
 
 
 
 
 int main()
 {
-    double salida=0.0;
+    double salida1=0.0, salida2=0.0, entrada=2;
     printf("Hello world!\n");
-    salida = fuzzy_system_single(1);
-    printf(" salida = %f", salida);
+    salida1 = fuzzy_system_single1(entrada);
+    printf(" salida = %f", salida1);
+    salida2 = fuzzy_system_single2(entrada);
+    printf(" salida = %f", salida2);
     return 0;
 }
