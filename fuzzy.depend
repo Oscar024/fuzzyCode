@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1503967947 source:/home/oscar/Documents/code blocks/fuzzy/main.c
+	<stdio.h>
+	<stdlib.h>
+
